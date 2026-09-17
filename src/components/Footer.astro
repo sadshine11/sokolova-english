@@ -76,10 +76,12 @@ const href = (hash: string) => (isHome ? hash : `${home}${hash}`);
 
   .foot__nav ul {
     display: grid;
-    gap: var(--s-2);
   }
 
+  /* Отдельно стоящие ссылки в списке — зона нажатия под палец */
   .foot__link {
+    display: inline-block;
+    padding-block: 10px;
     font-size: var(--t-small);
     color: #b9c6b6;
     text-decoration: none;
@@ -92,8 +94,12 @@ const href = (hash: string) => (isHome ? hash : `${home}${hash}`);
 
   .foot__contacts {
     display: grid;
-    gap: var(--s-2);
     font-size: var(--t-small);
+  }
+
+  .foot__contacts a {
+    display: inline-block;
+    padding-block: 10px;
   }
 
   .foot__contacts .link {

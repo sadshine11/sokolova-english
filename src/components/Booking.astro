@@ -379,9 +379,13 @@ const endpoint = import.meta.env.PUBLIC_FORM_ENDPOINT ?? '';
 
   .direct__list {
     display: grid;
-    gap: var(--s-2);
-    margin-top: var(--s-3);
+    margin-top: var(--s-2);
     font-size: var(--t-small);
+  }
+
+  .direct__list a {
+    display: inline-block;
+    padding-block: 10px;
   }
 
   @media (min-width: 560px) {
