@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" width="1200" height="675" role="img">
+  <defs>
+  <filter id="g3" x="0" y="0" width="100%" height="100%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" seed="7" result="n"/>
+    <feColorMatrix in="n" type="saturate" values="0"/>
+    <feComponentTransfer><feFuncA type="linear" slope="0.055"/></feComponentTransfer>
+  </filter></defs>
+  
+  <rect width="1200" height="675" fill="#e4ebdf"/>
+  <rect x="64" y="52" width="1072" height="530" fill="#fcfcfa" stroke="#c4cfc0" stroke-width="6"/>
+  <rect x="124" y="116" width="280" height="9" rx="4.5" fill="#3d4a3c" opacity="0.72"/><rect x="124" y="156" width="380" height="9" rx="4.5" fill="#3d4a3c" opacity="0.72"/><rect x="124" y="196" width="220" height="9" rx="4.5" fill="#3d4a3c" opacity="0.72"/>
+  <path d="M124 262h268" stroke="#0c8449" stroke-width="8" stroke-linecap="round"/>
+  <rect x="124" y="304" width="420" height="9" rx="4.5" fill="#3d4a3c" opacity="0.72"/><rect x="124" y="344" width="330" height="9" rx="4.5" fill="#3d4a3c" opacity="0.72"/>
+  <rect x="640" y="112" width="360" height="150" fill="none" stroke="#0a6b3c" stroke-width="7" rx="6"/>
+  <rect x="672" y="146" width="200" height="8" rx="4" fill="#0a6b3c" opacity="0.8"/><rect x="672" y="180" width="290" height="8" rx="4" fill="#0a6b3c" opacity="0.8"/><rect x="672" y="214" width="150" height="8" rx="4" fill="#0a6b3c" opacity="0.8"/>
+  <rect x="640" y="320" width="300" height="9" rx="4.5" fill="#3d4a3c" opacity="0.6"/><rect x="640" y="358" width="224" height="9" rx="4.5" fill="#3d4a3c" opacity="0.6"/>
+  <path d="M640 412h250" stroke="#0c8449" stroke-width="8" stroke-linecap="round"/>
+  <path d="M124 448l34 34 64-88" stroke="#0c8449" stroke-width="12" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <rect x="64" y="582" width="1072" height="18" fill="#c4cfc0"/>
+  <rect x="820" y="600" width="110" height="12" rx="6" fill="#0a6b3c"/>
+
+  <rect width="1200" height="675" filter="url(#g3)" opacity="0.9"/>
+</svg>

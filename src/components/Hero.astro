@@ -1,0 +1,349 @@
+---
+import { hero, figures, about } from '../content/site';
+import PenMark from './PenMark.astro';
+import { u } from '../lib/url';
+
+const line = hero.studentLine;
+---
+
+<section class="hero" aria-labelledby="hero-title">
+  <div class="shell hero__grid">
+    <p class="hero__status" data-reveal>
+      <PenMark variant="check" weight={3} />
+      <span>{hero.status}</span>
+    </p>
+
+    <h1 class="hero__title" id="hero-title" data-reveal style="--reveal-delay:60ms">
+      {hero.title}
+    </h1>
+
+    <p class="lede hero__lede" data-reveal style="--reveal-delay:120ms">{hero.lede}</p>
+
+    <figure class="portrait" data-reveal style="--reveal-delay:200ms">
+      <div class="portrait__plate">
+        <img
+          src={u(about.photo.src)}
+          alt={about.photo.alt}
+          width="800"
+          height="1000"
+          fetchpriority="high"
+          decoding="async"
+        />
+      </div>
+      <figcaption class="portrait__chip">
+        <span class="portrait__chip-key">с 2021 года</span>
+        эксперт предметной комиссии ЕГЭ
+      </figcaption>
+    </figure>
+
+    <div class="hero__actions" data-reveal style="--reveal-delay:180ms">
+      <a class="btn" href="#booking">{hero.ctaPrimary}</a>
+      <a class="btn btn--ghost" href="#lesson">{hero.ctaSecondary}</a>
+    </div>
+
+    <div class="sample" data-reveal style="--reveal-delay:240ms">
+      <p class="rail-label sample__label">Из письменной работы</p>
+      <p class="sample__line" lang="en">
+        {
+          line.parts.map((p) =>
+            p.marked ? (
+              <span class="marked">
+                {p.text}
+                <PenMark variant="underline" weight={2.5} class="marked__pen" />
+              </span>
+            ) : (
+              <span>{p.text}</span>
+            )
+          )
+        }
+      </p>
+      <p class="sample__note">
+        <span class="hand">{line.note}</span>
+        <span class="small muted sample__author">{line.author}</span>
+      </p>
+    </div>
+  </div>
+
+  <div class="shell">
+    <ul class="figures" data-reveal>
+      {
+        figures.items.map((f) => (
+          <li class="figures__item">
+            <span class="figure">{f.value}</span>
+            <span class="small muted figures__label">{f.label}</span>
+          </li>
+        ))
+      }
+    </ul>
+    <p class="figures__note muted">{figures.note}</p>
+  </div>
+</section>
+
+<style>
+  .hero {
+    padding-block: var(--s-8) var(--s-7);
+  }
+
+  .hero__grid {
+    display: grid;
+    gap: var(--s-5);
+    align-items: start;
+  }
+
+  /* ── Статус набора ────────────────────────────────────────────────── */
+  .hero__status {
+    display: flex;
+    align-items: center;
+    gap: var(--s-2);
+    font-size: var(--t-small);
+    color: var(--ink-600);
+  }
+
+  .hero__status :global(.pen) {
+    flex: none;
+    color: var(--green-600);
+  }
+
+  /* ── Заголовок ────────────────────────────────────────────────────── */
+  .hero__title {
+    max-width: 14ch;
+  }
+
+  .hero__lede {
+    margin-top: var(--s-1);
+  }
+
+  .hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s-3);
+    margin-top: var(--s-2);
+  }
+
+  /* На телефоне кнопки одной ширины: разная ширина в столбце выглядит небрежно */
+  @media (max-width: 479px) {
+    .hero__actions {
+      display: grid;
+    }
+  }
+
+  /* ── Портрет ──────────────────────────────────────────────────────── */
+  .portrait {
+    position: relative;
+    max-width: 380px;
+  }
+
+  .portrait__plate {
+    position: relative;
+    z-index: 1;
+    border-radius: var(--r-3);
+    overflow: hidden;
+    background: var(--paper-2);
+  }
+
+  /* Сдвинутая подложка — отсылка к ризографической печати в два прогона */
+  .portrait__plate::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border: 1px solid var(--rule);
+    border-radius: inherit;
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  .portrait::after {
+    content: '';
+    position: absolute;
+    inset: 14px -14px -14px 14px;
+    background: var(--green-100);
+    border-radius: var(--r-3);
+    z-index: 0;
+  }
+
+  .portrait img {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+  }
+
+  .portrait__chip {
+    position: relative;
+    z-index: 2;
+    margin-top: calc(var(--s-5) * -1);
+    margin-left: var(--s-4);
+    margin-right: var(--s-7);
+    padding: var(--s-3) var(--s-4);
+    background: var(--ink-900);
+    color: var(--paper);
+    border-radius: var(--r-2);
+    font-size: var(--t-micro);
+    line-height: 1.45;
+  }
+
+  .portrait__chip-key {
+    display: block;
+    color: var(--green-400);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ── Образец работы ───────────────────────────────────────────────── */
+  .sample {
+    border-top: 1px solid var(--rule);
+    padding-top: var(--s-4);
+    margin-top: var(--s-4);
+    max-width: 46ch;
+  }
+
+  .sample__label {
+    margin-bottom: var(--s-3);
+  }
+
+  .sample__line {
+    font-size: 1.1875rem;
+    line-height: 1.75;
+    color: var(--ink-800);
+  }
+
+  .marked {
+    position: relative;
+    display: inline-block;
+    color: var(--ink-900);
+  }
+
+  .marked :global(.marked__pen) {
+    position: absolute;
+    left: -2px;
+    right: -2px;
+    bottom: -0.32em;
+    width: auto;
+    height: 0.36em;
+  }
+
+  .sample__note {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: var(--s-2) var(--s-4);
+    margin-top: var(--s-4);
+  }
+
+  .sample__note .hand {
+    position: relative;
+    padding-left: 26px;
+  }
+
+  /* Стрелка от пометки к строке выше */
+  .sample__note .hand::before {
+    content: '';
+    position: absolute;
+    left: 2px;
+    top: 0.05em;
+    width: 14px;
+    height: 14px;
+    border-left: 2px solid var(--green-600);
+    border-bottom: 2px solid var(--green-600);
+    border-bottom-left-radius: 10px;
+  }
+
+  /* ── Цифры ────────────────────────────────────────────────────────── */
+  .figures {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1px;
+    margin-top: var(--s-8);
+    background: var(--rule);
+    border-block: 1px solid var(--rule);
+  }
+
+  .figures__item {
+    display: grid;
+    gap: var(--s-2);
+    align-content: start;
+    padding: var(--s-5) var(--s-4) var(--s-5) 0;
+    background: var(--paper);
+  }
+
+  .figures__item:nth-child(even) {
+    padding-left: var(--s-4);
+  }
+
+  .figures__label {
+    line-height: 1.4;
+  }
+
+  .figures__note {
+    margin-top: var(--s-4);
+    font-size: var(--t-micro);
+    max-width: 60ch;
+  }
+
+  /* ── Раскладка ────────────────────────────────────────────────────── */
+  @media (min-width: 620px) {
+    .figures {
+      grid-template-columns: repeat(4, 1fr);
+    }
+
+    .figures__item {
+      padding-inline: var(--s-4);
+    }
+
+    .figures__item:first-child {
+      padding-left: 0;
+    }
+
+    .figures__item:nth-child(even) {
+      padding-left: var(--s-4);
+    }
+  }
+
+  @media (min-width: 900px) {
+    .hero {
+      padding-block: var(--s-9) var(--s-8);
+    }
+
+    .hero__grid {
+      grid-template-columns: minmax(0, 1fr) minmax(300px, 400px);
+      column-gap: var(--s-8);
+      row-gap: var(--s-5);
+      grid-template-areas:
+        'status  portrait'
+        'title   portrait'
+        'lede    portrait'
+        'actions portrait'
+        'sample  portrait';
+      align-content: start;
+    }
+
+    .hero__status {
+      grid-area: status;
+    }
+    .hero__title {
+      grid-area: title;
+    }
+    .hero__lede {
+      grid-area: lede;
+    }
+    .hero__actions {
+      grid-area: actions;
+    }
+    .sample {
+      grid-area: sample;
+      align-self: end;
+    }
+
+    .portrait {
+      grid-area: portrait;
+      justify-self: end;
+      max-width: none;
+      width: 100%;
+      margin-top: var(--s-2);
+    }
+  }
+
+  @media (max-width: 899px) {
+    .portrait {
+      margin-block: var(--s-3);
+    }
+  }
+</style>

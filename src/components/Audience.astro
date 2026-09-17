@@ -1,0 +1,147 @@
+---
+import { audience } from '../content/site';
+---
+
+<section class="section section--paper2" id="audience" aria-labelledby="audience-title">
+  <div class="shell rail">
+    <aside class="rail-aside">
+      <p class="rail-label">С 5 по 11 класс</p>
+    </aside>
+
+    <div>
+      <div class="section-head" data-reveal>
+        <h2 id="audience-title">{audience.title}</h2>
+        <p class="lede">{audience.lede}</p>
+      </div>
+
+      <ul class="groups">
+        {
+          audience.groups.map((g, i) => (
+            <li class="group" data-reveal style={`--reveal-delay:${i * 70}ms`}>
+              <p class="group__grades">{g.grades}</p>
+              <div class="group__body">
+                <h3>{g.title}</h3>
+                <p class="muted">{g.body}</p>
+                <p class="group__tags small">
+                  {g.tags.map((t) => (
+                    <span class="group__tag">{t}</span>
+                  ))}
+                </p>
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+
+      <aside class="honesty" data-reveal>
+        <h3 class="honesty__title">{audience.honesty.title}</h3>
+        <ul class="honesty__list">
+          {
+            audience.honesty.items.map((item) => (
+              <li class="honesty__item">{item}</li>
+            ))
+          }
+        </ul>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<style>
+  .groups {
+    border-top: 1px solid var(--rule-strong);
+  }
+
+  .group {
+    display: grid;
+    gap: var(--s-3);
+    padding-block: var(--s-5);
+    border-bottom: 1px solid var(--rule-strong);
+  }
+
+  .group__grades {
+    font-family: var(--font-display);
+    font-size: 1.125rem;
+    letter-spacing: -0.02em;
+    color: var(--green-700);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .group__body p {
+    margin-top: var(--s-3);
+    max-width: 62ch;
+    color: var(--ink-600);
+  }
+
+  .group__tags {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--s-3);
+    color: var(--ink-400);
+  }
+
+  .group__tag + .group__tag::before {
+    content: '';
+    display: inline-block;
+    width: 1px;
+    height: 12px;
+    margin-right: var(--s-3);
+    background: var(--rule-strong);
+    vertical-align: -1px;
+  }
+
+  /* ── Честный блок ─────────────────────────────────────────────────── */
+  .honesty {
+    margin-top: var(--s-7);
+    padding: var(--s-5);
+    background: var(--paper-3);
+    border-radius: var(--r-2);
+  }
+
+  .honesty__title {
+    font-size: var(--t-base);
+    font-weight: 600;
+    margin-bottom: var(--s-4);
+  }
+
+  .honesty__item {
+    position: relative;
+    padding-left: var(--s-5);
+    color: var(--ink-600);
+    font-size: var(--t-small);
+    line-height: 1.6;
+    max-width: 68ch;
+  }
+
+  .honesty__item + .honesty__item {
+    margin-top: var(--s-3);
+  }
+
+  .honesty__item::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.62em;
+    width: 12px;
+    height: 1.5px;
+    background: var(--ink-200);
+  }
+
+  @media (min-width: 760px) {
+    .group {
+      grid-template-columns: 160px minmax(0, 1fr);
+      gap: var(--s-5);
+      padding-block: var(--s-6);
+    }
+
+    .group__grades {
+      font-size: 1.375rem;
+      padding-top: 2px;
+    }
+
+    .honesty {
+      padding: var(--s-6);
+    }
+  }
+</style>

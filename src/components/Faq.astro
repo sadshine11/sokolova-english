@@ -1,0 +1,129 @@
+---
+import { faq } from '../content/site';
+---
+
+<section class="section section--tight" id="faq" aria-labelledby="faq-title">
+  <div class="shell rail">
+    <aside class="rail-aside">
+      <p class="rail-label">Вопросы</p>
+    </aside>
+
+    <div class="faq">
+      <div class="section-head" data-reveal>
+        <h2 id="faq-title">{faq.title}</h2>
+      </div>
+
+      <ul class="qa" data-reveal>
+        {
+          faq.items.map((item) => (
+            <li>
+              <details class="qa__item">
+                <summary class="qa__q">
+                  <span>{item.q}</span>
+                  <span class="qa__sign" aria-hidden="true" />
+                </summary>
+                <div class="qa__a-wrap">
+                  <div class="qa__a-inner">
+                    <p class="qa__a">{item.a}</p>
+                  </div>
+                </div>
+              </details>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+</section>
+
+<style>
+  .qa {
+    border-top: 1px solid var(--rule-strong);
+    max-width: 78ch;
+  }
+
+  .qa__item {
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .qa__q {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--s-4);
+    padding-block: var(--s-4);
+    min-height: 44px;
+    cursor: pointer;
+    list-style: none;
+    font-weight: 500;
+    transition: color var(--fast) var(--ease);
+  }
+
+  .qa__q::-webkit-details-marker {
+    display: none;
+  }
+
+  .qa__q:hover {
+    color: var(--green-700);
+  }
+
+  /* Плюс/минус: состояние, а не украшение */
+  .qa__sign {
+    position: relative;
+    flex: none;
+    width: 16px;
+    height: 16px;
+    margin-top: 5px;
+  }
+
+  .qa__sign::before,
+  .qa__sign::after {
+    content: '';
+    position: absolute;
+    inset: 50% 0 auto;
+    height: 1.5px;
+    background: var(--green-700);
+    transition: transform var(--mid) var(--ease);
+  }
+
+  .qa__sign::after {
+    transform: rotate(90deg);
+  }
+
+  .qa__item[open] .qa__sign::after {
+    transform: rotate(0deg);
+  }
+
+  /* Плавное раскрытие без замера высоты в JS */
+  .qa__a-wrap {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows var(--mid) var(--ease);
+  }
+
+  .qa__item[open] .qa__a-wrap {
+    grid-template-rows: 1fr;
+  }
+
+  .qa__a-inner {
+    overflow: hidden;
+    min-height: 0;
+  }
+
+  .qa__a {
+    padding-bottom: var(--s-5);
+    padding-right: var(--s-6);
+    color: var(--ink-600);
+    line-height: 1.6;
+    max-width: 66ch;
+  }
+
+  @media (min-width: 760px) {
+    .qa__q {
+      padding-block: var(--s-5);
+      font-size: var(--t-h3);
+      font-weight: 500;
+      letter-spacing: -0.01em;
+    }
+  }
+</style>

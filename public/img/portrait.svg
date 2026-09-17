@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000" width="800" height="1000" role="img">
+  <defs>
+  <filter id="g1" x="0" y="0" width="100%" height="100%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" seed="7" result="n"/>
+    <feColorMatrix in="n" type="saturate" values="0"/>
+    <feComponentTransfer><feFuncA type="linear" slope="0.055"/></feComponentTransfer>
+  </filter></defs>
+  
+  <rect width="800" height="1000" fill="#eff3eb"/>
+  <path d="M110 1000V356a290 290 0 0 1 580 0v644z" fill="#dcefe2"/>
+  <g transform="translate(30 22)" opacity="0.5"><path d="M285 350 C285 240 336 186 400 186 C464 186 515 240 515 350 C515 400 519 442 522 476 L530 502 C562 513 601 529 627 557 C657 591 668 641 668 701 L668 1000 L132 1000 L132 701 C132 641 143 591 173 557 C199 529 238 513 270 502 L278 476 C281 442 285 400 285 350 Z" fill="#35b274"/></g>
+  <path d="M285 350 C285 240 336 186 400 186 C464 186 515 240 515 350 C515 400 519 442 522 476 L530 502 C562 513 601 529 627 557 C657 591 668 641 668 701 L668 1000 L132 1000 L132 701 C132 641 143 591 173 557 C199 529 238 513 270 502 L278 476 C281 442 285 400 285 350 Z" fill="#101711"/>
+  <path d="M362 508l38 44 38-44" stroke="#dcefe2" stroke-width="7" fill="none"
+        stroke-linecap="round" stroke-linejoin="round" opacity="0.75"/>
+  <path d="M166 918c74-32 152-48 234-48s160 16 234 48" stroke="#0a6b3c" stroke-width="7"
+        stroke-linecap="round" fill="none" opacity="0.9"/>
+
+  <rect width="800" height="1000" filter="url(#g1)" opacity="0.9"/>
+</svg>

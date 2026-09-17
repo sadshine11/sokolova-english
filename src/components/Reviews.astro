@@ -1,0 +1,114 @@
+---
+import { reviews } from '../content/site';
+---
+
+<section class="section section--paper2" id="reviews" aria-labelledby="reviews-title">
+  <div class="shell rail">
+    <aside class="rail-aside">
+      <p class="rail-label">Отзывы</p>
+    </aside>
+
+    <div>
+      <div class="section-head" data-reveal>
+        <h2 id="reviews-title">{reviews.title}</h2>
+        <p class="lede">{reviews.lede}</p>
+      </div>
+
+      <figure class="lead" data-reveal>
+        <blockquote class="lead__text">
+          <p>{reviews.featured.text}</p>
+        </blockquote>
+        <figcaption class="lead__by">
+          <span class="lead__author">{reviews.featured.author}</span>
+          <span class="small muted">{reviews.featured.detail}</span>
+        </figcaption>
+      </figure>
+
+      <ul class="more">
+        {
+          reviews.items.map((r, i) => (
+            <li class="more__item" data-reveal style={`--reveal-delay:${i * 60}ms`}>
+              <figure>
+                <blockquote>
+                  <p class="more__text">{r.text}</p>
+                </blockquote>
+                <figcaption class="more__by small">
+                  <span class="more__author">{r.author}</span>
+                  <span class="muted">{r.detail}</span>
+                </figcaption>
+              </figure>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* ── Главный отзыв: масштаб делает иерархию, рамка не нужна ───────── */
+  .lead {
+    padding-block: var(--s-5) var(--s-5);
+    border-block: 1px solid var(--rule-strong);
+  }
+
+  .lead__text p {
+    font-size: clamp(1.125rem, 1.02rem + 0.62vw, 1.4375rem);
+    line-height: 1.5;
+    letter-spacing: -0.012em;
+    color: var(--ink-800);
+    max-width: 58ch;
+  }
+
+  .lead__by {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: var(--s-2) var(--s-4);
+    margin-top: var(--s-5);
+  }
+
+  .lead__author {
+    font-weight: 600;
+  }
+
+  /* ── Остальные ────────────────────────────────────────────────────── */
+  .more {
+    display: grid;
+    gap: var(--s-6);
+    margin-top: var(--s-6);
+  }
+
+  .more__text {
+    color: var(--ink-600);
+    line-height: 1.6;
+    max-width: 52ch;
+  }
+
+  .more__by {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: var(--s-2) var(--s-3);
+    margin-top: var(--s-3);
+    padding-top: var(--s-3);
+    border-top: 1px solid var(--rule-strong);
+    max-width: 52ch;
+  }
+
+  .more__author {
+    font-weight: 600;
+  }
+
+  @media (min-width: 760px) {
+    .lead {
+      padding-block: var(--s-6);
+    }
+
+    .more {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--s-7) var(--s-7);
+      margin-top: var(--s-7);
+    }
+  }
+</style>

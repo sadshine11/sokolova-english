@@ -1,0 +1,96 @@
+---
+/* Подчёркивание зелёной ручкой. Растягивается под ширину слова.
+   Рисуется при появлении в зоне видимости (см. src/scripts/reveal.ts). */
+interface Props {
+  variant?: 'underline' | 'double' | 'circle' | 'check';
+  class?: string;
+  /** Толщина штриха в пикселях после растяжения по горизонтали. */
+  weight?: number;
+}
+const { variant = 'underline', class: cls = '', weight = 3 } = Astro.props;
+
+const paths: Record<string, string[]> = {
+  underline: ['M1 9.4C46 4.2 118 3.1 186 5.6c62 2.3 92 4.9 111 7.2'],
+  double: [
+    'M1 7.2C44 2.6 116 1.7 184 4c62 2.1 92 4.4 112 6.6',
+    'M6 15.1C52 11.6 120 11 186 12.8c56 1.5 88 3 105 4.6',
+  ],
+  circle: [
+    'M148 3.4C74 2 8 6.9 4 13.9c-4 7.2 56 14.1 144 14.6 88 .5 148-5.4 147-12.6C294 8.6 232 3.2 148 3.4',
+  ],
+  check: ['M2 11.5l7.4 8.6L26 2'],
+};
+
+const viewBoxes: Record<string, string> = {
+  underline: '0 0 298 16',
+  double: '0 0 298 20',
+  circle: '0 0 298 32',
+  check: '0 0 28 22',
+};
+
+const stretch = variant !== 'check';
+---
+
+<svg
+  class={`pen pen--${variant} ${cls}`}
+  viewBox={viewBoxes[variant]}
+  preserveAspectRatio={stretch ? 'none' : 'xMidYMid meet'}
+  fill="none"
+  aria-hidden="true"
+  focusable="false"
+  style={`--pen-weight:${weight}`}
+>
+  {
+    paths[variant].map((d, i) => (
+      <path
+        d={d}
+        stroke="currentColor"
+        stroke-width={weight}
+        stroke-linecap="round"
+        vector-effect={stretch ? 'non-scaling-stroke' : undefined}
+        style={`--pen-i:${i}`}
+      />
+    ))
+  }
+</svg>
+
+<style>
+  .pen {
+    display: block;
+    color: var(--green-600);
+    overflow: visible;
+  }
+
+  .pen--underline,
+  .pen--double {
+    width: 100%;
+    height: 0.42em;
+    --pen-len: 300;
+  }
+
+  .pen--circle {
+    width: 100%;
+    height: 100%;
+    --pen-len: 588;
+  }
+
+  .pen--check {
+    width: 0.9em;
+    height: 0.72em;
+    --pen-len: 36;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .pen path {
+      stroke-dasharray: var(--pen-len);
+      stroke-dashoffset: var(--pen-len);
+    }
+
+    :global(.is-in) .pen path,
+    .pen[data-drawn] path {
+      stroke-dashoffset: 0;
+      transition: stroke-dashoffset 640ms cubic-bezier(0.32, 0.12, 0.2, 1);
+      transition-delay: calc(var(--pen-delay, 240ms) + var(--pen-i) * 150ms);
+    }
+  }
+</style>

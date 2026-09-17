@@ -1,0 +1,241 @@
+---
+import { lesson } from '../content/site';
+
+const total = 60;
+const steps = lesson.steps.map((s, i) => {
+  const from = Number(s.from);
+  const to = Number(s.to);
+  return { ...s, i, from, to, share: ((to - from) / total) * 100 };
+});
+
+/* Последовательная шкала: занятие набирает плотность к середине и отпускает к концу */
+const ramp = ['#dcefe2', '#a9d9bf', '#5cbd8d', '#0c8449', '#0a6b3c'];
+---
+
+<section class="section section--tight" id="lesson" aria-labelledby="lesson-title">
+  <div class="shell rail">
+    <aside class="rail-aside">
+      <p class="rail-label">Одно занятие</p>
+      <div class="aside-note">
+        <p class="hand aside-note__hand">{lesson.aside.hand}</p>
+        <p class="small muted">{lesson.aside.body}</p>
+      </div>
+    </aside>
+
+    <div>
+      <div class="section-head" data-reveal>
+        <h2 id="lesson-title">{lesson.title}</h2>
+        <p class="lede">{lesson.lede}</p>
+      </div>
+
+      <div class="clock" data-reveal data-lesson>
+        <div class="clock__bar" role="presentation">
+          {
+            steps.map((s) => (
+              <button
+                class="clock__seg"
+                type="button"
+                style={`--w:${s.share}%;--fill:${ramp[s.i]}`}
+                data-seg={s.i}
+                aria-label={`Минуты ${s.from}–${s.to}: ${s.title}`}
+              />
+            ))
+          }
+        </div>
+        <div class="clock__ticks num" aria-hidden="true">
+          {
+            steps.map((s) => (
+              <span class="clock__tick" style={`--w:${s.share}%`}>
+                {s.from}
+              </span>
+            ))
+          }
+          <span class="clock__tick clock__tick--last">60</span>
+        </div>
+      </div>
+
+      <ol class="steps">
+        {
+          steps.map((s) => (
+            <li class="steps__row" data-step={s.i} data-reveal style={`--reveal-delay:${s.i * 60}ms`}>
+              <p class="steps__time num">
+                <span class="steps__from">{s.from}</span>
+                <span class="steps__to">—&nbsp;{s.to} мин</span>
+              </p>
+              <div class="steps__body">
+                <h3>{s.title}</h3>
+                <p class="muted">{s.body}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </div>
+</section>
+
+<style>
+  .aside-note {
+    margin-top: var(--s-4);
+    padding-top: var(--s-4);
+    border-top: 1px solid var(--rule);
+  }
+
+  .aside-note__hand {
+    margin-bottom: var(--s-2);
+  }
+
+  /* На узком экране заметка на полях уходит под список этапов: иначе
+     целый абзац стоит перед заголовком раздела и отодвигает его. */
+  @media (max-width: 999px) {
+    .rail > .rail-aside {
+      display: contents;
+    }
+
+    .rail > .rail-aside > .rail-label {
+      order: 1;
+    }
+
+    .rail > :not(.rail-aside) {
+      order: 2;
+    }
+
+    .rail > .rail-aside > .aside-note {
+      order: 3;
+      max-width: 52ch;
+      margin-top: var(--s-6);
+    }
+  }
+
+  /* На узкой шкале «52» и «60» стоят вплотную — оставляем только начала этапов */
+  @media (max-width: 560px) {
+    .clock__tick--last {
+      display: none;
+    }
+  }
+
+  /* ── Шкала времени ────────────────────────────────────────────────── */
+  .clock {
+    margin-bottom: var(--s-7);
+  }
+
+  .clock__bar {
+    display: flex;
+    gap: 2px;
+    /* На телефоне отрезки — это зоны нажатия, поэтому выше */
+    height: 44px;
+  }
+
+  @media (min-width: 760px) {
+    .clock__bar {
+      height: 36px;
+    }
+  }
+
+  .clock__seg {
+    flex: 0 0 var(--w);
+    min-width: 0;
+    height: 100%;
+    padding: 0;
+    border: 0;
+    background: var(--fill);
+    cursor: pointer;
+    border-radius: 2px;
+    position: relative;
+    transition: transform var(--fast) var(--ease);
+  }
+
+  .clock__seg::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border: 2px solid var(--ink-900);
+    border-radius: 2px;
+    opacity: 0;
+    transition: opacity var(--fast) var(--ease);
+  }
+
+  .clock__seg[data-active]::after {
+    opacity: 1;
+  }
+
+  .clock__ticks {
+    position: relative;
+    display: flex;
+    gap: 2px;
+    margin-top: var(--s-2);
+    font-size: var(--t-micro);
+    color: var(--ink-400);
+  }
+
+  .clock__tick {
+    flex: 0 0 var(--w);
+    min-width: 0;
+  }
+
+  /* Последняя засечка стоит на правом краю шкалы, а не следующей колонкой —
+     иначе сумма долей превышает 100% и строка вылезает за экран */
+  .clock__tick--last {
+    position: absolute;
+    right: 0;
+    top: 0;
+    flex: none;
+  }
+
+  /* ── Этапы ────────────────────────────────────────────────────────── */
+  .steps {
+    border-top: 1px solid var(--rule);
+  }
+
+  .steps__row {
+    display: grid;
+    gap: var(--s-2);
+    padding-block: var(--s-5);
+    border-bottom: 1px solid var(--rule);
+    transition: background-color var(--fast) var(--ease);
+  }
+
+  .steps__row[data-active] {
+    background: var(--paper-2);
+  }
+
+  .steps__time {
+    display: flex;
+    gap: var(--s-2);
+    align-items: baseline;
+    font-size: var(--t-small);
+    color: var(--ink-400);
+  }
+
+  .steps__from {
+    font-family: var(--font-display);
+    font-size: 1.125rem;
+    color: var(--ink-900);
+    line-height: 1;
+  }
+
+  .steps__body p {
+    margin-top: var(--s-2);
+    max-width: 62ch;
+    color: var(--ink-600);
+  }
+
+  @media (min-width: 760px) {
+    .steps__row {
+      grid-template-columns: 120px minmax(0, 1fr);
+      gap: var(--s-5);
+      padding-inline: var(--s-4);
+      margin-inline: calc(var(--s-4) * -1);
+    }
+
+    .steps__time {
+      flex-direction: column;
+      gap: 2px;
+      padding-top: 2px;
+    }
+
+    .steps__from {
+      font-size: 1.5rem;
+    }
+  }
+</style>

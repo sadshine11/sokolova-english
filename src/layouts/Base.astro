@@ -1,0 +1,90 @@
+---
+import '../styles/fonts.css';
+import '../styles/tokens.css';
+import '../styles/base.css';
+import golosCyr from '../assets/fonts/golos-text-400-cyrillic.woff2';
+import unboundedCyr from '../assets/fonts/unbounded-400-cyrillic.woff2';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { seo, person, contacts } from '../content/site';
+import { u } from '../lib/url';
+
+interface Props {
+  title?: string;
+  description?: string;
+  /** Структурированные данные добавляем только на главную. */
+  structuredData?: boolean;
+}
+
+const {
+  title = seo.title,
+  description = seo.description,
+  structuredData = false,
+} = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+
+const ld = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: person.name,
+  jobTitle: 'Репетитор по английскому языку',
+  description: seo.description,
+  url: canonical,
+  email: contacts.email.href.replace('mailto:', ''),
+  telephone: contacts.phone.label,
+  knowsLanguage: ['ru', 'en'],
+  address: { '@type': 'PostalAddress', addressLocality: person.city, addressCountry: 'RU' },
+  makesOffer: {
+    '@type': 'Offer',
+    itemOffered: {
+      '@type': 'Service',
+      name: 'Индивидуальные занятия английским языком и подготовка к ОГЭ и ЕГЭ',
+      areaServed: person.city,
+    },
+    priceCurrency: 'RUB',
+    price: '1800',
+  },
+};
+---
+
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+
+    <link rel="preload" href={golosCyr} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={unboundedCyr} as="font" type="font/woff2" crossorigin />
+
+    <link rel="icon" href={u('/favicon.svg')} type="image/svg+xml" />
+    <meta name="theme-color" content="#fcfcfa" />
+
+    <meta property="og:type" content="profile" />
+    <meta property="og:site_name" content={seo.siteName} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:locale" content="ru_RU" />
+    <meta property="og:image" content={new URL(u('/og.png'), Astro.site).href} />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    {
+      structuredData && (
+        <script type="application/ld+json" set:html={JSON.stringify(ld)} is:inline />
+      )
+    }
+  </head>
+
+  <body>
+    <a class="skip-link" href="#main">Перейти к содержанию</a>
+    <Header />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

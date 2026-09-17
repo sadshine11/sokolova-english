@@ -1,0 +1,126 @@
+---
+import { about } from '../content/site';
+import PenMark from './PenMark.astro';
+---
+
+<section class="section" id="about" aria-labelledby="about-title">
+  <div class="shell rail">
+    <aside class="rail-aside">
+      <p class="rail-label">Опыт</p>
+    </aside>
+
+    <div class="about">
+      <div class="about__main">
+        <div class="section-head" data-reveal>
+          <h2 id="about-title">{about.title}</h2>
+          <p class="lede">{about.lede}</p>
+        </div>
+
+        <div class="prose" data-reveal>
+          {about.paragraphs.map((p) => <p>{p}</p>)}
+        </div>
+
+        <blockquote class="quote" data-reveal>
+          <p>
+            {about.quote.before}<span class="red"
+              >{about.quote.red}<PenMark variant="underline" weight={3} class="red__pen" /></span
+            >{about.quote.after}
+          </p>
+        </blockquote>
+      </div>
+
+      <div class="about__side" data-reveal>
+        <h3 class="rail-label about__side-title">{about.timelineLabel}</h3>
+        <ol class="track">
+          {
+            about.timeline.map((t) => (
+              <li class="track__row">
+                <span class="track__year num">{t.year}</span>
+                <span class="track__what">{t.what}</span>
+              </li>
+            ))
+          }
+        </ol>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .about {
+    display: grid;
+    gap: var(--s-7);
+  }
+
+  .prose {
+    display: grid;
+    gap: var(--s-4);
+    max-width: 64ch;
+    color: var(--ink-600);
+  }
+
+  /* ── Цитата ───────────────────────────────────────────────────────── */
+  .quote {
+    margin-top: var(--s-6);
+    padding-top: var(--s-5);
+    border-top: 1px solid var(--rule);
+    max-width: 34rem;
+  }
+
+  .quote p {
+    font-family: var(--font-display);
+    font-size: clamp(1.0625rem, 0.98rem + 0.4vw, 1.25rem);
+    line-height: 1.5;
+    letter-spacing: -0.018em;
+    color: var(--ink-900);
+  }
+
+  .red {
+    position: relative;
+    display: inline-block;
+    white-space: nowrap;
+  }
+
+  .red :global(.red__pen) {
+    position: absolute;
+    left: -2px;
+    right: -2px;
+    bottom: -0.2em;
+    width: auto;
+    height: 0.34em;
+    color: var(--red);
+  }
+
+  /* ── Хронология ───────────────────────────────────────────────────── */
+  .about__side-title {
+    padding-bottom: var(--s-3);
+    border-bottom: 1px solid var(--rule-strong);
+  }
+
+  .track__row {
+    display: grid;
+    grid-template-columns: 56px minmax(0, 1fr);
+    gap: var(--s-4);
+    padding-block: var(--s-3);
+    border-bottom: 1px solid var(--rule);
+    font-size: var(--t-small);
+  }
+
+  .track__year {
+    color: var(--green-700);
+    font-weight: 500;
+  }
+
+  .track__what {
+    color: var(--ink-600);
+    line-height: 1.5;
+  }
+
+  @media (min-width: 900px) {
+    .about {
+      grid-template-columns: minmax(0, 1fr) minmax(260px, 340px);
+      gap: var(--s-8);
+      align-items: start;
+    }
+  }
+</style>

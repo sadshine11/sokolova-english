@@ -1,0 +1,333 @@
+---
+import { exams } from '../content/site';
+---
+
+<section class="section section--ink" id="exams" aria-labelledby="exams-title">
+  <div class="shell rail">
+    <aside class="rail-aside">
+      <p class="rail-label">Формат экзамена</p>
+    </aside>
+
+    <div>
+      <div class="section-head" data-reveal>
+        <h2 id="exams-title">{exams.title}</h2>
+        <p class="lede">{exams.lede}</p>
+      </div>
+
+      <div class="tabs" data-tabs>
+        <div class="tabs__list" role="tablist" aria-label="Выбор экзамена">
+          {
+            exams.tabs.map((t, i) => (
+              <button
+                class="tabs__tab"
+                type="button"
+                role="tab"
+                id={`tab-${t.id}`}
+                aria-controls={`panel-${t.id}`}
+                aria-selected={i === 0 ? 'true' : 'false'}
+                tabindex={i === 0 ? '0' : '-1'}
+              >
+                {t.label}
+              </button>
+            ))
+          }
+        </div>
+
+        {
+          exams.tabs.map((t, i) => (
+            <div
+              class="panel"
+              role="tabpanel"
+              id={`panel-${t.id}`}
+              aria-labelledby={`tab-${t.id}`}
+              tabindex="0"
+              data-first={i === 0 ? '' : undefined}
+            >
+              <p class="panel__summary">{t.summary}</p>
+
+              <ul class="parts">
+                {t.parts.map((p) => (
+                  <li class="part">
+                    <h3 class="part__name">{p.name}</h3>
+                    <p class="part__tasks muted">{p.tasks}</p>
+                    <p class="part__nums num">
+                      <span class="part__minutes">{p.minutes} мин</span>
+                      <span class="part__points">
+                        {p.points}<span class="part__points-unit"> баллов</span>
+                      </span>
+                      <span
+                        class="part__bar"
+                        style={`--share:${(Number(p.points) / Number(t.maxPrimary)) * 100}%`}
+                        aria-hidden="true"
+                      />
+                    </p>
+                    <p class="part__weak">
+                      <span class="part__weak-label">{exams.weakLabel}</span>
+                      {p.weak}
+                    </p>
+                  </li>
+                ))}
+              </ul>
+
+              <p class="panel__scale small">{t.scaleNote}</p>
+            </div>
+          ))
+        }
+      </div>
+
+      <div class="plan" data-reveal>
+        <h3 class="plan__title">{exams.plan.title}</h3>
+        <ol class="plan__list">
+          {
+            exams.plan.items.map((p) => (
+              <li class="plan__item">
+                <p class="plan__when">{p.when}</p>
+                <p class="plan__what muted">{p.what}</p>
+              </li>
+            ))
+          }
+        </ol>
+        <p class="plan__note small muted">{exams.plan.note}</p>
+      </div>
+
+      <p class="source small">{exams.source}</p>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* ── Табы ─────────────────────────────────────────────────────────── */
+  .tabs__list {
+    display: flex;
+    gap: var(--s-2);
+    border-bottom: 1px solid #2b362a;
+    margin-bottom: var(--s-5);
+  }
+
+  .tabs__tab {
+    position: relative;
+    padding: var(--s-3) var(--s-4);
+    min-height: 44px;
+    background: none;
+    border: 0;
+    color: #8b9b88;
+    font-size: var(--t-small);
+    font-weight: 500;
+    cursor: pointer;
+    transition: color var(--fast) var(--ease);
+  }
+
+  .tabs__tab::after {
+    content: '';
+    position: absolute;
+    left: var(--s-4);
+    right: var(--s-4);
+    bottom: -1px;
+    height: 2px;
+    background: var(--green-400);
+    transform: scaleX(0);
+    transition: transform var(--mid) var(--ease);
+  }
+
+  .tabs__tab:hover {
+    color: var(--paper);
+  }
+
+  .tabs__tab[aria-selected='true'] {
+    color: var(--paper);
+  }
+
+  .tabs__tab[aria-selected='true']::after {
+    transform: none;
+  }
+
+  /* Без JS показываем обе панели; скрипт помечает корень и включает табы */
+  .panel + .panel {
+    margin-top: var(--s-7);
+  }
+
+  [data-tabs-ready] .panel[hidden] {
+    display: none;
+  }
+
+  [data-tabs-ready] .panel + .panel {
+    margin-top: 0;
+  }
+
+  .panel:focus-visible {
+    outline-offset: 6px;
+  }
+
+  .panel__summary {
+    color: #b9c6b6;
+    font-size: var(--t-small);
+    margin-bottom: var(--s-5);
+  }
+
+  /* ── Разделы экзамена ─────────────────────────────────────────────── */
+  .parts {
+    border-top: 1px solid #2b362a;
+  }
+
+  .part {
+    display: grid;
+    gap: var(--s-2);
+    padding-block: var(--s-4);
+    border-bottom: 1px solid #2b362a;
+  }
+
+  .part__name {
+    font-size: var(--t-base);
+    font-weight: 600;
+  }
+
+  .part__tasks {
+    font-size: var(--t-small);
+  }
+
+  .part__nums {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: var(--s-2) var(--s-4);
+    font-size: var(--t-small);
+    color: #b9c6b6;
+  }
+
+  .part__points {
+    color: var(--paper);
+    font-weight: 500;
+  }
+
+  .part__points-unit {
+    color: #8b9b88;
+    font-weight: 400;
+  }
+
+  /* Полоса занимает всю ширину колонки на отдельной строке — только так
+     видно, сколько весит раздел относительно остальных */
+  .part__bar {
+    flex: 1 0 100%;
+    height: 4px;
+    border-radius: 2px;
+    background: #2b362a;
+    margin-top: var(--s-1);
+  }
+
+  .part__bar::before {
+    content: '';
+    display: block;
+    width: var(--share);
+    height: 100%;
+    border-radius: inherit;
+    background: var(--green-400);
+  }
+
+  .part__weak {
+    font-size: var(--t-small);
+    color: #b9c6b6;
+    max-width: 68ch;
+    line-height: 1.55;
+  }
+
+  /* Ярлык повторяется в каждой строке, поэтому он тихий: акцент в разделе
+     один — полоса весов. */
+  .part__weak-label {
+    display: block;
+    font-size: var(--t-micro);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #7e8d7b;
+    margin-bottom: 2px;
+  }
+
+  .panel__scale {
+    margin-top: var(--s-4);
+    color: #96a593;
+    max-width: 62ch;
+  }
+
+  /* ── План года ────────────────────────────────────────────────────── */
+  .plan {
+    margin-top: var(--s-8);
+    padding-top: var(--s-6);
+    border-top: 1px solid #2b362a;
+  }
+
+  .plan__title {
+    font-size: var(--t-h3);
+    font-weight: 600;
+    margin-bottom: var(--s-5);
+  }
+
+  .plan__list {
+    display: grid;
+    gap: var(--s-5);
+  }
+
+  .plan__item {
+    padding-top: var(--s-3);
+    border-top: 1px solid #2b362a;
+  }
+
+  .plan__when {
+    font-family: var(--font-display);
+    font-size: var(--t-small);
+    color: var(--green-400);
+    margin-bottom: var(--s-2);
+  }
+
+  .plan__what {
+    font-size: var(--t-small);
+    line-height: 1.55;
+  }
+
+  .plan__note {
+    margin-top: var(--s-5);
+    max-width: 68ch;
+  }
+
+  .source {
+    margin-top: var(--s-7);
+    padding-top: var(--s-4);
+    border-top: 1px solid #2b362a;
+    color: #7e8d7b;
+    font-size: var(--t-micro);
+    max-width: 70ch;
+  }
+
+  @media (min-width: 720px) {
+    .part {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 320px);
+      column-gap: var(--s-6);
+      row-gap: var(--s-2);
+      align-items: baseline;
+      padding-block: var(--s-5);
+    }
+
+    .part__name {
+      grid-column: 1;
+    }
+
+    .part__tasks {
+      grid-column: 1;
+      grid-row: 2;
+    }
+
+    .part__nums {
+      grid-column: 2;
+      grid-row: 1 / span 2;
+      align-self: start;
+    }
+
+    .part__weak {
+      grid-column: 1 / -1;
+      margin-top: var(--s-2);
+    }
+
+    .plan__list {
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--s-4);
+    }
+  }
+</style>

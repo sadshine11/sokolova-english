@@ -1,0 +1,408 @@
+---
+import { booking, contacts } from '../content/site';
+import { u } from '../lib/url';
+
+/* Куда уходит заявка. Задаётся переменной окружения PUBLIC_FORM_ENDPOINT
+   (например, форма Formspree или Web3Forms). Если не задана — сайт работает
+   в демонстрационном режиме и предлагает отправить то же сообщение в Telegram. */
+const endpoint = import.meta.env.PUBLIC_FORM_ENDPOINT ?? '';
+---
+
+<section class="section section--ink" id="booking" aria-labelledby="booking-title">
+  <div class="shell rail">
+    <aside class="rail-aside">
+      <p class="rail-label">Заявка</p>
+    </aside>
+
+    <div>
+      <div class="section-head" data-reveal>
+        <h2 id="booking-title">{booking.title}</h2>
+        <p class="lede">{booking.lede}</p>
+      </div>
+
+      <div class="book">
+        <form
+          class="form"
+          data-form
+          data-endpoint={endpoint}
+          data-telegram={contacts.telegram.href}
+          novalidate
+        >
+          <div class="field">
+            <label class="field__label" for="f-name">Как вас зовут</label>
+            <input
+              class="field__input"
+              id="f-name"
+              name="name"
+              type="text"
+              autocomplete="name"
+              required
+              aria-describedby="e-name"
+              placeholder="Елена"
+            />
+            <p class="field__error" id="e-name" data-error-for="name"></p>
+          </div>
+
+          <div class="field">
+            <label class="field__label" for="f-contact">Телефон или Telegram</label>
+            <input
+              class="field__input"
+              id="f-contact"
+              name="contact"
+              type="text"
+              autocomplete="tel"
+              required
+              aria-describedby="e-contact h-contact"
+              placeholder="+7 900 000-00-00 или @nickname"
+            />
+            <p class="field__hint" id="h-contact">Отвечу туда, куда вам удобнее.</p>
+            <p class="field__error" id="e-contact" data-error-for="contact"></p>
+          </div>
+
+          <div class="field field--half">
+            <label class="field__label" for="f-grade">Класс</label>
+            <div class="field__select">
+              <select class="field__input" id="f-grade" name="grade" required aria-describedby="e-grade">
+                <option value="" selected disabled>Выберите</option>
+                {booking.grades.map((g) => <option value={g}>{g}</option>)}
+              </select>
+              <svg class="field__chev" viewBox="0 0 12 8" width="12" height="8" aria-hidden="true" fill="none"
+                ><path d="M1 1.5L6 6.5l5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                /></svg
+              >
+            </div>
+            <p class="field__error" id="e-grade" data-error-for="grade"></p>
+          </div>
+
+          <div class="field field--half">
+            <label class="field__label" for="f-goal">Что нужно</label>
+            <div class="field__select">
+              <select class="field__input" id="f-goal" name="goal">
+                {booking.goals.map((g) => <option value={g.value}>{g.label}</option>)}
+              </select>
+              <svg class="field__chev" viewBox="0 0 12 8" width="12" height="8" aria-hidden="true" fill="none"
+                ><path d="M1 1.5L6 6.5l5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                /></svg
+              >
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="field__label" for="f-note">
+              Что-то ещё <span class="field__optional">— необязательно</span>
+            </label>
+            <textarea
+              class="field__input field__textarea"
+              id="f-note"
+              name="note"
+              rows="3"
+              placeholder="Какой сейчас уровень, что не получается, когда удобно заниматься"></textarea>
+          </div>
+
+          <div class="consent">
+            <input class="consent__box" id="f-consent" name="consent" type="checkbox" required
+              aria-describedby="e-consent" />
+            <label class="consent__label small" for="f-consent">
+              Согласен на обработку персональных данных в соответствии с
+              <a class="link" href={u('/policy')}>политикой конфиденциальности</a>.
+            </label>
+            <p class="field__error consent__error" id="e-consent" data-error-for="consent"></p>
+          </div>
+
+          <div class="form__foot">
+            <button class="btn form__submit" type="submit" data-submit>
+              <span data-submit-label>Отправить заявку</span>
+            </button>
+            <p class="hand form__hand">{booking.hand}</p>
+          </div>
+
+          <p class="form__status" role="status" aria-live="polite" data-status></p>
+        </form>
+
+        <aside class="next" data-reveal>
+          <h3 class="rail-label next__title">{booking.stepsLabel}</h3>
+          <ol class="next__list">
+            {
+              booking.steps.map((s, i) => (
+                <li class="next__item">
+                  <span class="next__n num" aria-hidden="true">
+                    {i + 1}
+                  </span>
+                  <span>
+                    <span class="next__head">{s.title}</span>
+                    <span class="next__body muted small">{s.body}</span>
+                  </span>
+                </li>
+              ))
+            }
+          </ol>
+
+          <div class="direct">
+            <h3 class="rail-label">{booking.directLabel}</h3>
+            <ul class="direct__list">
+              <li><a class="link" href={contacts.telegram.href}>Telegram {contacts.telegram.label}</a></li>
+              <li><a class="link" href={contacts.whatsapp.href}>WhatsApp {contacts.whatsapp.label}</a></li>
+              <li><a class="link" href={contacts.phone.href}>{contacts.phone.label}</a></li>
+            </ul>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .book {
+    display: grid;
+    gap: var(--s-7);
+  }
+
+  /* ── Форма ────────────────────────────────────────────────────────── */
+  .form {
+    display: grid;
+    gap: var(--s-4);
+    padding: var(--s-5);
+    background: var(--paper);
+    color: var(--ink-900);
+    border-radius: var(--r-3);
+  }
+
+  .field {
+    display: grid;
+    gap: 6px;
+  }
+
+  .field__label {
+    font-size: var(--t-small);
+    font-weight: 500;
+  }
+
+  .field__optional {
+    font-weight: 400;
+    color: var(--ink-400);
+  }
+
+  .field__input {
+    width: 100%;
+    min-height: 48px;
+    padding: 12px 14px;
+    background: var(--paper);
+    border: 1px solid var(--rule-strong);
+    border-radius: var(--r-1);
+    font-size: var(--t-base);
+    transition:
+      border-color var(--fast) var(--ease),
+      background-color var(--fast) var(--ease);
+  }
+
+  .field__input::placeholder {
+    color: var(--ink-200);
+  }
+
+  .field__input:hover {
+    border-color: var(--ink-200);
+  }
+
+  .field__input:focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 1px;
+    border-color: var(--focus);
+  }
+
+  .field__input[aria-invalid='true'] {
+    border-color: var(--red);
+  }
+
+  .field__textarea {
+    min-height: 96px;
+    resize: vertical;
+    line-height: 1.5;
+  }
+
+  .field__select {
+    position: relative;
+  }
+
+  .field__select select {
+    appearance: none;
+    padding-right: 40px;
+    cursor: pointer;
+  }
+
+  .field__chev {
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--ink-400);
+    pointer-events: none;
+  }
+
+  .field__hint {
+    font-size: var(--t-micro);
+    color: var(--ink-400);
+  }
+
+  .field__error {
+    font-size: var(--t-micro);
+    color: var(--red);
+    display: none;
+  }
+
+  .field__error:not(:empty) {
+    display: block;
+  }
+
+  /* ── Согласие ─────────────────────────────────────────────────────── */
+  .consent {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: var(--s-3);
+    align-items: start;
+    margin-top: var(--s-2);
+  }
+
+  .consent__box {
+    width: 20px;
+    height: 20px;
+    margin: 2px 0 0;
+    accent-color: var(--green-700);
+    cursor: pointer;
+  }
+
+  .consent__label {
+    color: var(--ink-600);
+    line-height: 1.5;
+    cursor: pointer;
+  }
+
+  .consent__error {
+    grid-column: 1 / -1;
+  }
+
+  /* ── Подвал формы ─────────────────────────────────────────────────── */
+  .form__foot {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--s-4);
+    margin-top: var(--s-2);
+  }
+
+  .form__submit {
+    flex: 1 1 200px;
+  }
+
+  .form__submit[data-busy] {
+    opacity: 0.75;
+    pointer-events: none;
+  }
+
+  .form__hand {
+    position: relative;
+    padding-left: 24px;
+    font-size: 1.25rem;
+  }
+
+  .form__hand::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.1em;
+    width: 13px;
+    height: 13px;
+    border-left: 2px solid var(--green-600);
+    border-bottom: 2px solid var(--green-600);
+    border-bottom-left-radius: 10px;
+  }
+
+  .form__status {
+    font-size: var(--t-small);
+    line-height: 1.5;
+  }
+
+  .form__status:empty {
+    display: none;
+  }
+
+  .form__status[data-tone='ok'] {
+    color: var(--green-700);
+    font-weight: 500;
+  }
+
+  .form__status[data-tone='bad'] {
+    color: var(--red);
+  }
+
+  /* ── Что дальше ───────────────────────────────────────────────────── */
+  .next__title {
+    padding-bottom: var(--s-3);
+    border-bottom: 1px solid #2b362a;
+  }
+
+  .next__list {
+    display: grid;
+    gap: var(--s-4);
+    margin-top: var(--s-4);
+  }
+
+  .next__item {
+    display: grid;
+    grid-template-columns: 28px minmax(0, 1fr);
+    gap: var(--s-3);
+    align-items: baseline;
+  }
+
+  .next__n {
+    font-family: var(--font-display);
+    font-size: var(--t-small);
+    color: var(--green-400);
+  }
+
+  .next__head {
+    display: block;
+    font-weight: 500;
+    color: var(--paper);
+  }
+
+  .next__body {
+    display: block;
+    margin-top: 2px;
+    line-height: 1.5;
+  }
+
+  .direct {
+    margin-top: var(--s-6);
+    padding-top: var(--s-5);
+    border-top: 1px solid #2b362a;
+  }
+
+  .direct__list {
+    display: grid;
+    gap: var(--s-2);
+    margin-top: var(--s-3);
+    font-size: var(--t-small);
+  }
+
+  @media (min-width: 560px) {
+    .form {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      padding: var(--s-6);
+    }
+
+    .field:not(.field--half),
+    .consent,
+    .form__foot,
+    .form__status {
+      grid-column: 1 / -1;
+    }
+  }
+
+  @media (min-width: 980px) {
+    .book {
+      grid-template-columns: minmax(0, 1fr) minmax(240px, 300px);
+      gap: var(--s-8);
+      align-items: start;
+    }
+  }
+</style>

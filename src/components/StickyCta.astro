@@ -1,0 +1,85 @@
+---
+import { contacts } from '../content/site';
+
+/* Мобильная панель записи: страница длинная, а в шапке на телефоне
+   помещается только бургер. Прячется, пока открытие ещё на экране,
+   и когда виден сам блок с формой. */
+---
+
+<div class="cta-bar" data-sticky-cta>
+  <div class="cta-bar__inner">
+    <a class="btn cta-bar__main" href="#booking">Записаться на занятие</a>
+    <a class="cta-bar__tg" href={contacts.telegram.href} aria-label="Написать в Telegram">
+      <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="none">
+        <path
+          d="M21.3 4.3L3.9 11c-1 .4-1 1.8.1 2.1l4.3 1.3 1.6 5c.3.9 1.4 1.1 2 .4l2.3-2.4 4.3 3.2c.7.5 1.7.1 1.9-.7l3-14c.2-1-.8-1.9-1.8-1.5z"
+          stroke="currentColor"
+          stroke-width="1.6"
+          stroke-linejoin="round"></path>
+        <path d="M8.3 14.4L18.6 7 10.4 16v3.3" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"
+        ></path>
+      </svg>
+    </a>
+  </div>
+</div>
+
+<style>
+  .cta-bar {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 40;
+    background: var(--paper);
+    border-top: 1px solid var(--rule);
+    padding-bottom: env(safe-area-inset-bottom, 0);
+    transform: translateY(100%);
+    visibility: hidden;
+    transition:
+      transform var(--mid) var(--ease),
+      visibility var(--mid);
+  }
+
+  /* visibility убирает ссылки из порядка обхода, пока панель за экраном */
+  .cta-bar[data-shown] {
+    transform: none;
+    visibility: visible;
+  }
+
+  .cta-bar__inner {
+    display: flex;
+    gap: var(--s-3);
+    padding: 10px var(--gutter);
+  }
+
+  .cta-bar__main {
+    flex: 1;
+  }
+
+  .cta-bar__tg {
+    display: grid;
+    place-items: center;
+    width: 48px;
+    flex: none;
+    border: 1px solid var(--rule-strong);
+    border-radius: var(--r-1);
+    color: var(--green-700);
+    transition: background-color var(--fast) var(--ease);
+  }
+
+  .cta-bar__tg:hover {
+    background: var(--paper-2);
+  }
+
+  @media (min-width: 1000px) {
+    .cta-bar {
+      display: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cta-bar {
+      transition: none;
+    }
+  }
+</style>

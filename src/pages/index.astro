@@ -1,0 +1,59 @@
+---
+import Base from '../layouts/Base.astro';
+import Hero from '../components/Hero.astro';
+import Lesson from '../components/Lesson.astro';
+import Audience from '../components/Audience.astro';
+import Exams from '../components/Exams.astro';
+import About from '../components/About.astro';
+import Gallery from '../components/Gallery.astro';
+import Pricing from '../components/Pricing.astro';
+import Reviews from '../components/Reviews.astro';
+import Faq from '../components/Faq.astro';
+import Booking from '../components/Booking.astro';
+import StickyCta from '../components/StickyCta.astro';
+import { faq } from '../content/site';
+
+const faqLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faq.items.map((item) => ({
+    '@type': 'Question',
+    name: item.q,
+    acceptedAnswer: { '@type': 'Answer', text: item.a },
+  })),
+};
+---
+
+<Base structuredData>
+  <Hero />
+  <Lesson />
+  <Audience />
+  <Exams />
+  <About />
+  <Gallery />
+  <Pricing />
+  <Reviews />
+  <Faq />
+  <Booking />
+  <StickyCta />
+
+  <script type="application/ld+json" set:html={JSON.stringify(faqLd)} is:inline />
+</Base>
+
+<script>
+  import { initReveal } from '../scripts/reveal';
+  import { initHeader } from '../scripts/header';
+  import { initLesson } from '../scripts/lesson';
+  import { initTabs } from '../scripts/tabs';
+  import { initLightbox } from '../scripts/lightbox';
+  import { initForm } from '../scripts/form';
+  import { initStickyCta } from '../scripts/sticky-cta';
+
+  initReveal();
+  initHeader();
+  initLesson();
+  initTabs();
+  initLightbox();
+  initForm();
+  initStickyCta();
+</script>

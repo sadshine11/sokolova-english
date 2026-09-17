@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000" width="800" height="1000" role="img">
+  <defs>
+  <filter id="g2" x="0" y="0" width="100%" height="100%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" seed="7" result="n"/>
+    <feColorMatrix in="n" type="saturate" values="0"/>
+    <feComponentTransfer><feFuncA type="linear" slope="0.055"/></feComponentTransfer>
+  </filter></defs>
+  
+  <rect width="800" height="1000" fill="#fcfcfa"/>
+  <rect y="780" width="800" height="220" fill="#e4ebdf"/>
+  <circle cx="470" cy="300" r="215" fill="#dcefe2" opacity="0.8"/>
+  <path d="M470 60v90" stroke="#3d4a3c" stroke-width="8" stroke-linecap="round"/>
+  <path d="M386 150h168l-42 74h-84z" fill="#101711"/>
+
+  <rect x="96" y="700" width="300" height="30" rx="4" fill="#0a6b3c"/>
+  <rect x="116" y="664" width="280" height="30" rx="4" fill="#101711"/>
+  <rect x="88" y="628" width="296" height="30" rx="4" fill="#35b274"/>
+  <rect x="120" y="592" width="240" height="30" rx="4" fill="#3d4a3c"/>
+
+  <path d="M430 736h250v44H430z" fill="#fcfcfa" stroke="#c4cfc0" stroke-width="3"/>
+  <path d="M430 736l-26 44h250l26-44z" fill="#eff3eb" stroke="#c4cfc0" stroke-width="3"/>
+  <rect x="448" y="746" width="130" height="4" rx="2" fill="#3d4a3c" opacity="0.5"/><rect x="448" y="758" width="180" height="4" rx="2" fill="#3d4a3c" opacity="0.5"/><rect x="448" y="770" width="104" height="4" rx="2" fill="#3d4a3c" opacity="0.5"/>
+
+  <rect x="616" y="654" width="86" height="126" rx="10" fill="#eff3eb" stroke="#c4cfc0" stroke-width="3"/>
+  <rect x="628" y="600" width="9" height="68" rx="4" fill="#3d4a3c"/><rect x="646" y="614" width="9" height="54" rx="4" fill="#0c8449"/><rect x="664" y="600" width="9" height="68" rx="4" fill="#3d4a3c"/><rect x="682" y="614" width="9" height="54" rx="4" fill="#0c8449"/>
+
+  <path d="M556 780a46 46 0 0 1 92 0z" fill="none"/>
+  <rect y="780" width="800" height="4" fill="#c4cfc0"/>
+
+  <rect width="800" height="1000" filter="url(#g2)" opacity="0.9"/>
+</svg>

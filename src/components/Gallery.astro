@@ -1,0 +1,223 @@
+---
+import { gallery } from '../content/site';
+import { u } from '../lib/url';
+
+const ratios: Record<string, string> = {
+  tall: '4 / 5',
+  wide: '16 / 9',
+  normal: '3 / 2',
+};
+/* Раскладка коллажа: широкий кадр и вертикальный в первом ряду, два средних
+   во втором, последний широкий — с отступом слева. Ни один кадр не тянется
+   через два ряда, поэтому пропорции остаются честными. */
+const slots = ['b', 'a', 'c', 'd', 'e'];
+---
+
+<section class="section section--paper2" id="gallery" aria-labelledby="gallery-title">
+  <div class="shell rail">
+    <aside class="rail-aside">
+      <p class="rail-label">Кабинет и ученики</p>
+    </aside>
+
+    <div>
+      <div class="section-head" data-reveal>
+        <h2 id="gallery-title">{gallery.title}</h2>
+        <p class="lede">{gallery.lede}</p>
+      </div>
+
+      <div class="gal" data-gallery>
+        {
+          gallery.items.map((item, i) => (
+            <figure
+              class="gal__fig"
+              data-slot={slots[i]}
+              style={`--slot:${slots[i]};--ratio:${ratios[item.size]}`}
+              data-reveal
+            >
+              <button class="gal__btn" type="button" data-gal-open={i}>
+                <img
+                  src={u(item.src)}
+                  alt={item.alt}
+                  loading="lazy"
+                  decoding="async"
+                  width="1200"
+                  height="900"
+                />
+                <span class="visually-hidden">Открыть фотографию крупнее</span>
+              </button>
+              <figcaption class="gal__cap small muted">{item.caption}</figcaption>
+            </figure>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</section>
+
+<dialog class="lb" data-lightbox aria-label="Просмотр фотографии">
+  <div class="lb__inner">
+    <img class="lb__img" src="" alt="" data-lb-img />
+    <div class="lb__bar">
+      <p class="lb__cap small" data-lb-cap></p>
+      <div class="lb__nav">
+        <button class="lb__btn" type="button" data-lb-prev aria-label="Предыдущая фотография">
+          <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" fill="none"
+            ><path d="M10 2L4 8l6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+            /></svg
+          >
+        </button>
+        <button class="lb__btn" type="button" data-lb-next aria-label="Следующая фотография">
+          <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" fill="none"
+            ><path d="M6 2l6 6-6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+            /></svg
+          >
+        </button>
+        <button class="lb__btn lb__btn--close" type="button" data-lb-close aria-label="Закрыть">
+          <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" fill="none"
+            ><path d="M3 3l10 10M13 3L3 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+            /></svg
+          >
+        </button>
+      </div>
+    </div>
+  </div>
+</dialog>
+
+<style>
+  .gal {
+    display: grid;
+    gap: var(--s-4);
+  }
+
+  .gal__fig {
+    display: grid;
+    grid-template-rows: 1fr auto;
+    gap: var(--s-3);
+    min-width: 0;
+  }
+
+  .gal__btn {
+    display: block;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    border: 1px solid var(--rule-strong);
+    border-radius: var(--r-2);
+    overflow: hidden;
+    background: var(--paper-3);
+    cursor: zoom-in;
+    transition: border-color var(--fast) var(--ease);
+  }
+
+  .gal__btn:hover {
+    border-color: var(--green-600);
+  }
+
+  .gal__btn img {
+    width: 100%;
+    height: 100%;
+    aspect-ratio: var(--ratio);
+    object-fit: cover;
+  }
+
+  .gal__cap {
+    line-height: 1.45;
+    max-width: 44ch;
+  }
+
+  @media (min-width: 900px) {
+    .gal {
+      grid-template-columns: repeat(6, 1fr);
+      gap: var(--s-5) var(--s-4);
+      grid-template-areas:
+        'a a a a b b'
+        'c c c d d d'
+        '. . e e e e';
+      align-items: start;
+    }
+
+    .gal__fig {
+      grid-area: var(--slot);
+    }
+  }
+
+  /* ── Просмотр ─────────────────────────────────────────────────────── */
+  .lb {
+    width: min(92vw, 1100px);
+    max-width: none;
+    padding: 0;
+    border: 0;
+    border-radius: var(--r-3);
+    background: var(--paper);
+    color: var(--ink-900);
+    overflow: hidden;
+  }
+
+  .lb::backdrop {
+    background: rgba(16, 23, 17, 0.82);
+  }
+
+  .lb__inner {
+    display: grid;
+  }
+
+  .lb__img {
+    width: 100%;
+    max-height: 72vh;
+    object-fit: contain;
+    background: var(--paper-2);
+  }
+
+  .lb__bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--s-4);
+    padding: var(--s-4);
+    border-top: 1px solid var(--rule);
+  }
+
+  .lb__cap {
+    color: var(--ink-600);
+    margin: 0;
+  }
+
+  .lb__nav {
+    display: flex;
+    gap: var(--s-2);
+    flex: none;
+  }
+
+  .lb__btn {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border: 1px solid var(--rule-strong);
+    border-radius: var(--r-1);
+    background: var(--paper);
+    cursor: pointer;
+    transition: background-color var(--fast) var(--ease);
+  }
+
+  .lb__btn:hover {
+    background: var(--paper-2);
+  }
+
+  .lb__btn--close {
+    background: var(--ink-900);
+    color: var(--paper);
+    border-color: var(--ink-900);
+  }
+
+  .lb__btn--close:hover {
+    background: var(--ink-800);
+  }
+
+  @media (max-width: 560px) {
+    .lb__bar {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+</style>

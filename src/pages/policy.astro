@@ -1,0 +1,144 @@
+---
+import Base from '../layouts/Base.astro';
+import { person, contacts } from '../content/site';
+
+const updated = '1 сентября 2026 года';
+
+const blocks = [
+  {
+    title: 'Кто обрабатывает данные',
+    body: [
+      `${person.name}, самозанятая, ИНН 667000000000, ${person.city}. Связаться можно по адресу ${contacts.email.label} или в Telegram ${contacts.telegram.label}.`,
+    ],
+  },
+  {
+    title: 'Какие данные я собираю',
+    body: [
+      'Через форму записи на сайте: имя, телефон или ник в Telegram, класс ученика, цель занятий и текст комментария, если вы его написали.',
+      'Больше ничего сайт не собирает: здесь нет аналитики, рекламных пикселей и сторонних скриптов. Cookie сайт не использует.',
+    ],
+  },
+  {
+    title: 'Зачем они нужны',
+    body: [
+      'Чтобы ответить вам и договориться о бесплатном занятии. Для других целей — рассылок, рекламы, анализа поведения — эти данные не используются.',
+    ],
+  },
+  {
+    title: 'Кому я их передаю',
+    body: [
+      'Никому. Данные не передаются третьим лицам и не размещаются в открытом доступе. Исключение — случаи, когда этого требует закон.',
+    ],
+  },
+  {
+    title: 'Сколько я их храню',
+    body: [
+      'Если занятия не начались — до 6 месяцев с момента заявки, потом удаляю. Если вы стали учеником — пока мы занимаемся и год после окончания, чтобы можно было вернуться к прежней программе.',
+    ],
+  },
+  {
+    title: 'Как отозвать согласие',
+    body: [
+      `Напишите мне на ${contacts.email.label} или в Telegram ${contacts.telegram.label} — удалю все ваши данные в течение трёх рабочих дней и подтвержу это ответным сообщением. Причину объяснять не нужно.`,
+    ],
+  },
+  {
+    title: 'Ваши права',
+    body: [
+      'Вы можете запросить, какие именно данные о вас у меня есть, потребовать их исправить или удалить. Всё это бесплатно и без объяснения причин — по статье 14 Федерального закона № 152-ФЗ «О персональных данных».',
+    ],
+  },
+];
+---
+
+<Base
+  title={`Политика конфиденциальности — ${person.name}`}
+  description="Какие персональные данные собирает сайт, зачем они нужны, сколько хранятся и как отозвать согласие на обработку."
+>
+  <article class="section policy">
+    <div class="shell rail">
+      <aside class="rail-aside">
+        <p class="rail-label">Обновлено<br />{updated}</p>
+      </aside>
+
+      <div class="policy__main">
+        <h1 class="policy__title">Политика конфиденциальности</h1>
+        <p class="lede policy__lede">
+          Коротко: сайт собирает только то, что вы сами написали в форме записи, использует это
+          исключительно чтобы вам ответить, и удаляет по первой просьбе.
+        </p>
+
+        {
+          blocks.map((block) => (
+            <section class="policy__block">
+              <h2 class="policy__h2">{block.title}</h2>
+              {block.body.map((p) => (
+                <p class="policy__p">{p}</p>
+              ))}
+            </section>
+          ))
+        }
+
+        <p class="policy__back">
+          <a class="link" href="./">← Вернуться на главную</a>
+        </p>
+      </div>
+    </div>
+  </article>
+</Base>
+
+<script>
+  import { initHeader } from '../scripts/header';
+  import { initReveal } from '../scripts/reveal';
+  initHeader();
+  initReveal();
+</script>
+
+<style>
+  .policy {
+    padding-block: var(--s-8) var(--s-9);
+  }
+
+  .policy__main {
+    max-width: 66ch;
+  }
+
+  .policy__title {
+    font-size: clamp(1.625rem, 1.1rem + 2.2vw, 2.75rem);
+    max-width: 18ch;
+  }
+
+  .policy__lede {
+    margin-top: var(--s-4);
+    max-width: 54ch;
+  }
+
+  .policy__block {
+    margin-top: var(--s-6);
+    padding-top: var(--s-5);
+    border-top: 1px solid var(--rule);
+  }
+
+  .policy__h2 {
+    font-family: var(--font-text);
+    font-size: var(--t-h3);
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    margin-bottom: var(--s-3);
+  }
+
+  .policy__p + .policy__p {
+    margin-top: var(--s-3);
+  }
+
+  .policy__p {
+    color: var(--ink-600);
+    line-height: 1.65;
+  }
+
+  .policy__back {
+    margin-top: var(--s-7);
+    padding-top: var(--s-5);
+    border-top: 1px solid var(--rule);
+  }
+</style>

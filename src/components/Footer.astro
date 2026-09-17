@@ -1,0 +1,134 @@
+---
+import { person, contacts, nav } from '../content/site';
+import { u } from '../lib/url';
+
+const year = new Date().getFullYear();
+const home = u('/');
+const isHome = Astro.url.pathname.replace(/\/$/, '') === u('').replace(/\/$/, '');
+const href = (hash: string) => (isHome ? hash : `${home}${hash}`);
+---
+
+<footer class="foot">
+  <div class="shell">
+    <div class="foot__top">
+      <div class="foot__brand">
+        <p class="foot__name">{person.name}</p>
+        <p class="small foot__role">
+          {person.role}<br />{person.city}, {person.format}
+        </p>
+      </div>
+
+      <nav class="foot__nav" aria-label="Разделы сайта">
+        <ul>
+          {
+            nav.map((item) => (
+              <li>
+                <a class="foot__link" href={href(item.href)}>
+                  {item.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+
+      <ul class="foot__contacts">
+        <li><a class="link" href={contacts.telegram.href}>Telegram {contacts.telegram.label}</a></li>
+        <li><a class="link" href={contacts.whatsapp.href}>WhatsApp</a></li>
+        <li><a class="link" href={contacts.phone.href}>{contacts.phone.label}</a></li>
+        <li><a class="link" href={contacts.email.href}>{contacts.email.label}</a></li>
+      </ul>
+    </div>
+
+    <div class="foot__bottom">
+      <p class="foot__legal">
+        © {year} {person.name}. Самозанятая, ИНН 667000000000.
+      </p>
+      <a class="foot__legal foot__policy" href={u('/policy')}>Политика конфиденциальности</a>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .foot {
+    background: var(--ink-900);
+    color: var(--paper);
+    padding-block: var(--s-7) var(--s-5);
+    border-top: 1px solid #2b362a;
+  }
+
+  .foot__top {
+    display: grid;
+    gap: var(--s-6);
+  }
+
+  .foot__name {
+    font-family: var(--font-display);
+    font-size: 1.125rem;
+    letter-spacing: -0.02em;
+  }
+
+  .foot__role {
+    margin-top: var(--s-2);
+    color: #96a593;
+    line-height: 1.6;
+  }
+
+  .foot__nav ul {
+    display: grid;
+    gap: var(--s-2);
+  }
+
+  .foot__link {
+    font-size: var(--t-small);
+    color: #b9c6b6;
+    text-decoration: none;
+    transition: color var(--fast) var(--ease);
+  }
+
+  .foot__link:hover {
+    color: var(--paper);
+  }
+
+  .foot__contacts {
+    display: grid;
+    gap: var(--s-2);
+    font-size: var(--t-small);
+  }
+
+  .foot__contacts .link {
+    color: var(--green-400);
+  }
+
+  .foot__bottom {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: var(--s-3) var(--s-5);
+    margin-top: var(--s-7);
+    padding-top: var(--s-4);
+    border-top: 1px solid #2b362a;
+  }
+
+  .foot__legal {
+    font-size: var(--t-micro);
+    color: #7e8d7b;
+  }
+
+  .foot__policy {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    transition: color var(--fast) var(--ease);
+  }
+
+  .foot__policy:hover {
+    color: var(--paper);
+  }
+
+  @media (min-width: 760px) {
+    .foot__top {
+      grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) minmax(0, 1fr);
+      gap: var(--s-6);
+    }
+  }
+</style>
