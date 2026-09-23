@@ -302,8 +302,10 @@ const line = hero.studentLine;
       padding-block: var(--s-9) var(--s-8);
     }
 
+    /* Портрет сжимается вместе с экраном: при фиксированных 400px на 900–950px
+       колонка заголовка становится уже слова «Английский», и оно рвётся посередине */
     .hero__grid {
-      grid-template-columns: minmax(0, 1fr) minmax(300px, 400px);
+      grid-template-columns: minmax(0, 1fr) clamp(280px, 34vw, 400px);
       column-gap: var(--s-8);
       row-gap: var(--s-5);
       grid-template-areas:
